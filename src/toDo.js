@@ -27,7 +27,11 @@ function toDo() {
       // Create list item element
       const listItem = document.createElement('li');
       listItem.classList.add('list-items');
-      listItem.innerHTML = `<input type='checkbox' id='list-checkbox' name='checkbox'><p class='list-paragraph'>${task.description}</p><img src='${threedot}'  alt='#' class='list-img'>`;
+      listItem.innerHTML = `
+      <input class='checkbox' type="checkbox" ${task.completed ? 'checked' : ''}>
+      <p class='list-paragraph'>${task.description}</p>
+      <img src="${threedot}" alt='#' class='list-img'>
+    `;
 
       // Append list item to the list container
       listContainer.appendChild(listItem);
