@@ -1,4 +1,5 @@
-import toDo from './toDo.js';
+import ToDo from './toDo.js';
 import './style/main.css';
 
-toDo();
+const list = new ToDo();
+list.addTask('');

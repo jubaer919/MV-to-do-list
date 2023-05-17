@@ -40,3 +40,12 @@ body {
   margin-left: auto;
   height: 25px;
 }
+
+.delete-icon {
+  display: none;
+  margin-left: auto;
+}
+
+.list-paragraph {
+  padding: 10px;
+}
