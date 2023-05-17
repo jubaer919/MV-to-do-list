@@ -9,17 +9,14 @@ export default class Todo {
     this.toDoList = document.querySelector('.to-do-list');
 
     // load the list from the local storage
-    if (localStorage.getItem('list')) {
-      this.list = JSON.parse(localStorage.getItem('list'));
-      this.renderList();
-    }
+    this.loadListFromLocalStorage();
 
     // add listener to the buttons
     this.listInput.addEventListener('keyup', (event) => {
       if (event.key === 'Enter') {
         const taskName = this.listInput.value;
         this.addTask(taskName);
-        localStorage.setItem('list', JSON.stringify(this.list));
+        this.saveListToLocalStorage();
         this.listInput.value = '';
       }
     });
@@ -45,7 +42,8 @@ export default class Todo {
         deleteIcon.addEventListener('click', () => {
           const index = Array.from(this.toDoList.children).indexOf(listItem);
           this.removeListItem(index);
-          localStorage.setItem('list', JSON.stringify(this.list));
+          this.updateIndexes();
+          this.saveListToLocalStorage();
         });
       }
     });
@@ -56,9 +54,20 @@ export default class Todo {
         const index = Array.from(this.toDoList.children).indexOf(listItem);
         const taskName = event.target.innerText.trim();
         this.updateTask(index, taskName);
-        localStorage.setItem('list', JSON.stringify(this.list));
+        this.saveListToLocalStorage();
       }
     });
+  }
+
+  loadListFromLocalStorage() {
+    const storedList = localStorage.getItem('list');
+    this.list = storedList ? JSON.parse(storedList) : [];
+    this.updateIndexes();
+    this.renderList();
+  }
+
+  saveListToLocalStorage() {
+    localStorage.setItem('list', JSON.stringify(this.list));
   }
 
   removeListItem(index) {
@@ -73,15 +82,21 @@ export default class Todo {
     }
   }
 
+  updateIndexes() {
+    this.list.forEach((task, index) => {
+      task.index = index + 1;
+    });
+  }
+
   renderList() {
     this.toDoList.innerHTML = '';
-    this.list.forEach((list, index) => {
+    this.list.forEach((task) => {
       const listItem = document.createElement('li');
       listItem.classList.add('list-items');
       listItem.innerHTML = `
       <input class='checkbox' type="checkbox">
-      <p class='list-paragraph' contenteditable="true">${list.taskName}</p>
-      <img src=${threedot} alt="#" data-index="${index}" class='list-img'>
+      <p class='list-paragraph' contenteditable="true">${task.taskName}</p>
+      <img src=${threedot} alt="#" data-index="${task.index}" class='list-img'>
       <img src=${deleteIcons} alt="Delete" class="delete-icon">
       `;
       this.toDoList.appendChild(listItem);
@@ -95,7 +110,12 @@ export default class Todo {
       return;
     }
 
-    const newTask = { taskName };
+    const newTask = {
+      taskName,
+      completed: false,
+      index: this.list.length + 1,
+    };
+
     this.list.push(newTask);
     this.renderList();
   }
