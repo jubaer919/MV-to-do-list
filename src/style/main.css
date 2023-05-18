@@ -1,0 +1,56 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #e2e2e2;
+}
+
+.container {
+  background-color: #fff;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.25);
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+.container > * {
+  width: 100%;
+  padding: 1rem;
+}
+
+.to-do-list {
+  padding: 0;
+}
+
+.list-items {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e2e2e2;
+  gap: 10px;
+}
+
+.list-img {
+  margin-left: auto;
+  height: 25px;
+}
+
+.delete-icon {
+  display: none;
+  margin-left: auto;
+}
+
+.list-paragraph {
+  padding: 10px;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #777;
+}
