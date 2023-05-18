@@ -1,5 +1,6 @@
 import threedot from './assets/3-dot.svg';
 import deleteIcons from './assets/delete.svg';
+import { setTaskCompletedStatus, clearCompletedTasks } from './status.js';
 
 export default class Todo {
   constructor() {
@@ -57,6 +58,19 @@ export default class Todo {
         this.saveListToLocalStorage();
       }
     });
+
+    this.toDoList.addEventListener('change', (event) => {
+      if (event.target.classList.contains('checkbox')) {
+        const listItem = event.target.closest('li');
+        const index = Array.from(this.toDoList.children).indexOf(listItem);
+        const completed = event.target.checked;
+        setTaskCompletedStatus.call(this, index, completed);
+      }
+    });
+
+    this.removeCompletedTask.addEventListener('click', () => {
+      clearCompletedTasks.call(this);
+    });
   }
 
   loadListFromLocalStorage() {
@@ -93,12 +107,17 @@ export default class Todo {
     this.list.forEach((task) => {
       const listItem = document.createElement('li');
       listItem.classList.add('list-items');
+
+      const paragraphClass = task.completed ? 'list-paragraph completed' : 'list-paragraph';
+      const paragraphStyle = task.completed ? 'text-decoration: line-through; color: #777;' : '';
+
       listItem.innerHTML = `
-      <input class='checkbox' type="checkbox">
-      <p class='list-paragraph' contenteditable="true">${task.taskName}</p>
-      <img src=${threedot} alt="#" data-index="${task.index}" class='list-img'>
-      <img src=${deleteIcons} alt="Delete" class="delete-icon">
+        <input class='checkbox' type="checkbox" ${task.completed ? 'checked' : ''}>
+        <p class='${paragraphClass}' style='${paragraphStyle}' contenteditable="true">${task.taskName}</p>
+        <img src=${threedot} alt="#" data-index="${task.index}" class='list-img'>
+        <img src=${deleteIcons} alt="Delete" class="delete-icon">
       `;
+
       this.toDoList.appendChild(listItem);
     });
   }

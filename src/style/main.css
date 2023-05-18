@@ -49,3 +49,8 @@ body {
 .list-paragraph {
   padding: 10px;
 }
+
+.completed {
+  text-decoration: line-through;
+  color: #777;
+}
